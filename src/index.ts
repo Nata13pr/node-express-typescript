@@ -11,8 +11,6 @@ async function newMong() {
   await connect(mongoURI);
 }
 
-newMong().then(() => UserModel.create({name: 'test', email: 'test', password: 'test'}))
-
 
 // dotenv.config();
 // const app : express.Application | express.Router = express()
