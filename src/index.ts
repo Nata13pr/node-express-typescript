@@ -7,11 +7,7 @@ import {connect} from 'mongoose';
 
 const mongoURI:string='mongodb://127.0.0.1:27017/camp';
 
-async function newMong() {
-  await connect(mongoURI);
-}
-
-
+connect(mongoURI)
 // dotenv.config();
 // const app : express.Application | express.Router = express()
 const app: Express = express();

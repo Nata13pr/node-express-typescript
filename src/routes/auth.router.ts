@@ -2,11 +2,18 @@ import {Router} from 'express';
 import{Request,Response}from 'express';
 import {login} from '../controllers/auth.controller'
 import {checkIsUserPresent} from '../middlewares/user.middleware'
+import {createUser} from "../controllers/user.controller";
 
-const userRouter:Router=Router();
+const authRouter:Router=Router();
 
-userRouter.post('/login',
+authRouter.post('/login',
     // checkIsUserPresent,
     login)
+authRouter.post(
+    '/register',
+    // isNewUserValid,
+    //  isEmailRegistered,
+    createUser
+);
 
-export default userRouter;
+export default authRouter;
