@@ -17,7 +17,6 @@ async function createUser(req: Request, res: Response, next: NextFunction): Prom
         const hashedPassword = await hashPassword(req.body.password);
 
         const user = await User.create({ ...req.body, password: hashedPassword });
-        console.log('in create user',user)
          res.status(201).json(user);
     } catch (e) {
         next(e);

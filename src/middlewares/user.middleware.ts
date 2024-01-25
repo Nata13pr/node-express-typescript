@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import  CustomError  from '../error/CustomError';
 import { newUserValidator } from '../validators/user.validator';
 import User from '../dataBase/User';
+import {CustomRequest,ReqUser} from '../interfaces/User.interface'
+
 
 export const isNewUserValid = (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -33,7 +35,7 @@ export const isEmailRegistered = async (req: Request, res: Response, next: NextF
     }
 };
 
-export const checkIsUserPresent = async (req: Request, res: Response, next: NextFunction) => {
+export const checkIsUserPresent = async (req: CustomRequest, res: Response, next: NextFunction) => {
     try {
         const { email } = req.body;
         const userByEmail = await User.findOne({ email });
@@ -42,7 +44,7 @@ export const checkIsUserPresent = async (req: Request, res: Response, next: Next
             throw new CustomError(`User not found`, 404);
         }
 
-        req.user = userByEmail;
+       req.user = userByEmail as ReqUser;
         next();
     } catch (e) {
         next(e);
