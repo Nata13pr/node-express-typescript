@@ -4,9 +4,10 @@ import {ACCESS_TOKEN_SECRET,REFRESH_TOKEN_SECRET}from '../constants/config';
 
 interface AuthPayload{
     userId:string;
+    _id:string;
 }
 
-export function genereteAuthTokens(payload:AuthPayload={}):{access_token:string,refresh_token:string}{
+export function genereteAuthTokens(payload:AuthPayload={userId:'',_id:''}):{access_token:string,refresh_token:string}{
     const access_token=jwt.sign(payload,ACCESS_TOKEN_SECRET,{expiresIn:'15m'});
     const refresh_token=jwt.sign(payload,REFRESH_TOKEN_SECRET,{expiresIn:'30d'});
 

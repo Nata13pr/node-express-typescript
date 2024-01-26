@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import {Request, Response, NextFunction, RequestHandler} from 'express';
 import  CustomError  from '../error/CustomError';
 import { newUserValidator } from '../validators/user.validator';
 import User from '../dataBase/User';
@@ -35,7 +35,7 @@ export const isEmailRegistered = async (req: Request, res: Response, next: NextF
     }
 };
 
-export const checkIsUserPresent = async (req: CustomRequest, res: Response, next: NextFunction) => {
+export const checkIsUserPresent:RequestHandler = async (req: CustomRequest, res: Response, next: NextFunction) => {
     try {
         const { email } = req.body;
         const userByEmail = await User.findOne({ email });

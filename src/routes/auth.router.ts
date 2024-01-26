@@ -6,14 +6,16 @@ import {isNewUserValid,isEmailRegistered,checkIsUserPresent} from '../middleware
 
 const authRouter:Router=Router();
 
+authRouter.post(
+    '/register',
+    isNewUserValid,
+    isEmailRegistered,
+    createUser
+);
 authRouter.post('/login',
     checkIsUserPresent,
     login)
-authRouter.post(
-    '/register',
-     isNewUserValid,
-     isEmailRegistered,
-    createUser
-);
 
+authRouter.post('/logout',
+    logout)
 export default authRouter;
