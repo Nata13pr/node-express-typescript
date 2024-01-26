@@ -24,3 +24,11 @@ export function checkAccessTokenAvailable(token:string=''):AuthPayload{
         throw new CError('Token not valid',401)
     }
 }
+
+export  function checkRefreshTokenAvailable(token:string=''):AuthPayload{
+try{
+    return jwt.verify(token,REFRESH_TOKEN_SECRET) as AuthPayload;
+    }catch(e){
+    throw new CError('Token not valid',401)
+}
+}

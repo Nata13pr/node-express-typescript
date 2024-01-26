@@ -23,6 +23,10 @@ const UserSchema = new Schema<IUser>({
         type:String,
         required:true
     },
+    someReference:{
+        type:Schema.Types.ObjectId,
+        ref:'SomeModel',
+    }
 },{timestamps:true});
 
 const UserModel = model('user',UserSchema)

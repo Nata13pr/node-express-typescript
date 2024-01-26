@@ -1,4 +1,5 @@
 import {Schema,model,Document}from 'mongoose';
+import UserModel from "./User";
 
 interface OAuthDocument extends Document{
     userId:Schema.Types.ObjectId;
@@ -25,4 +26,7 @@ const OAuthSchema=new Schema<OAuthDocument>(
     {timestamps:true}
 );
 
-export default model<OAuthDocument>('oauth',OAuthSchema)
+const OAuthModel=  model<OAuthDocument>('oauth',OAuthSchema);
+
+export default OAuthModel;
+export type AuthDocument=OAuthDocument & Document;

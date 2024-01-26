@@ -16,7 +16,7 @@ const app: Express = express();
 app.use(express.json());
 app.use(express.urlencoded({extended:true}))
 
-app.use('/auth',authRouter)
+app.use('/api/user',authRouter)
 
 
 app.use('*',(req:Request,res:Response,next:NextFunction)=>{

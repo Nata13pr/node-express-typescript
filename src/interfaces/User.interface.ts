@@ -1,4 +1,5 @@
 import {Request} from "express";
+import {Schema} from "mongoose";
 
 export interface ReqUser {
     _id: string;
@@ -9,7 +10,25 @@ export interface ReqUser {
     updatedAt: string;
     __v: number;
 }
-
-export interface CustomRequest extends Request {
-    user?:ReqUser
+export interface TokenInfoInterface {
+    _id:string;
+    userId:Schema.Types.ObjectId;
+    access_token:string;
+    refresh_token:string;
+    createdAt:string;
+    updatedAt:string;
+    __v:number;
 }
+export interface CustomRequest extends Request {
+    user?:ReqUser;
+    access_token?:string;
+    refresh_token?:string;
+
+}
+export interface CheckAccessTokenRequest extends Request{
+    user?:Schema.Types.ObjectId;
+    access_token?:string;
+    refresh_token?:string;
+}
+
+
