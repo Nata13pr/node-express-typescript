@@ -9,7 +9,7 @@ interface OAuthDocument extends Document{
 
 const OAuthSchema=new Schema<OAuthDocument>(
     {
-        userId:{
+            userId:{
             type:Schema.Types.ObjectId,
             ref:'user',
             required:true,

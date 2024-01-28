@@ -1,9 +1,18 @@
 import {Request,Response,NextFunction} from 'express';
-import {checkAccessTokenAvailable,genereteAuthTokens,checkRefreshToken} from '../services/token.service.js';
+import {checkAccessTokenAvailable,genereteAuthTokens} from '../services/token.service.js';
 import {hashPassword,comparePassword} from '../services/password.service';
 import OAuth from '../dataBase/OAuth';
-import {CustomRequest,ReqUser,TokenInfoInterface} from '../interfaces/User.interface'
+import {
+    CheckRefreshTokenRequest,
+    CustomRequest,
+    ReqUser,
+    TokenInfoInterface,
+    RefreshIn,
+    CheckAccessTokenRequest
+} from '../interfaces/User.interface'
 import CustomError from "../error/CustomError";
+import OAuthModel from "../dataBase/OAuth";
+import {log} from "util";
 
 export const login =async (req:CustomRequest,res:Response,next:NextFunction)=>{
     try{
@@ -53,15 +62,24 @@ export const logout=async (req:CustomRequest,res:Response,next:NextFunction)=>{
 
 export const refresh=async (req:CustomRequest,res:Response,next:NextFunction)=>{
     try{
-        console.log('controller222222222222222222222222')
-        // // const{_id}=req;
-        //  const {refresh_token}=req;
-        // //
-        // // const {email,name}=user as ReqUser
-        //
-        // await OAuth.findByIdAndUpdate({access_token});
-        //
-        // res.sendStatus(204);
+
+    const{user:userId,refresh_token}=req;
+
+
+
+ if(!userId || !refresh_token){
+     throw new CustomError('Invalid token information')
+ }
+ await OAuthModel.deleteOne({refresh_token});
+
+ const tokens =genereteAuthTokens();
+
+ await OAuthModel.create({
+     userId,
+     ...tokens
+ })
+         console.log('almost finished !!!!!!!!!!!!!!!!!!!!!',userId)
+         res.json(tokens)
     }catch(e){
         next(e)
     }
