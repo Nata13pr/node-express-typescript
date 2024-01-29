@@ -1,5 +1,4 @@
 import {Router} from 'express';
-import{Request,Response}from 'express';
 import {login,logout,refresh} from '../controllers/auth.controller'
 import {createUser} from "../controllers/user.controller";
 import {isNewUserValid,isEmailRegistered,checkIsUserPresent} from '../middlewares/user.middleware';

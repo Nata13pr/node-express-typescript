@@ -1,13 +1,16 @@
 import {Schema,model,Document}from 'mongoose';
 import UserModel from "./User";
 
-interface OAuthDocument extends Document{
+export interface OAuthDocument extends Document{
     userId:Schema.Types.ObjectId;
     access_token:string;
     refresh_token:string;
+    createdAt:string;
+    updatedAt:string;
 }
 
 const OAuthSchema=new Schema<OAuthDocument>(
+
     {
             userId:{
             type:Schema.Types.ObjectId,

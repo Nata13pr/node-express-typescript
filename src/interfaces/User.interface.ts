@@ -1,7 +1,7 @@
 import {Request} from "express";
 import {Schema} from "mongoose";
 import { ObjectId } from "mongoose"
-import {AuthDocument} from "../dataBase/OAuth";
+import { OAuthDocument} from "../dataBase/OAuth";
 
 export interface ReqUser {
     _id: string;
@@ -13,23 +13,14 @@ export interface ReqUser {
     __v: number;
 }
 
-interface YourInterface {
-    _id: ObjectId;
-    userId: Schema.Types.ObjectId;
-    access_token: string;
-    refresh_token: string;
-    createdAt: Date;
-    updatedAt: Date;
-    __v: number;
-}
-export interface TokenInfoInterface {
-    _id:string;
+export interface TokenInfoInterface extends  OAuthDocument{
+    _id?:ObjectId;
     userId:Schema.Types.ObjectId;
     access_token:string;
     refresh_token:string;
     createdAt:string;
     updatedAt:string;
-    __v:number;
+    __v?:number;
 }
 export interface CustomRequest extends Request {
     user?:ReqUser;
@@ -38,16 +29,14 @@ export interface CustomRequest extends Request {
    }
 
 export interface CheckAccessTokenRequest extends Request{
-    user?:Schema.Types.ObjectId;
     access_token?:string;
-    refresh_token?:string;
+
 }
 
 export interface CheckRefreshTokenRequest extends Request{
-    user?:AuthDocument
+    tokenInfo?:TokenInfoInterface;
 
 }
 
-export interface RefreshIn extends Request{
-user?:YourInterface
-}
+
+

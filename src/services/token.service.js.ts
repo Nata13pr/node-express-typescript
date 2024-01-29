@@ -17,7 +17,7 @@ export function genereteAuthTokens(payload:AuthPayload={userId:'',_id:''}):{acce
     }
 }
 
-export function checkAccessTokenAvailable(token:string=''):AuthPayload{
+export function verifyAccessToken(token:string=''):AuthPayload{
     try{
         return jwt.verify(token,ACCESS_TOKEN_SECRET)as AuthPayload;
     }catch(e){
@@ -25,7 +25,7 @@ export function checkAccessTokenAvailable(token:string=''):AuthPayload{
     }
 }
 
-export  function checkRefreshTokenAvailable(token:string=''):AuthPayload{
+export  function verifyRefreshToken(token:string=''):AuthPayload{
 try{
     return jwt.verify(token,REFRESH_TOKEN_SECRET) as AuthPayload;
     }catch(e){

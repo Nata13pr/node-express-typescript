@@ -1,18 +1,15 @@
 import {Request,Response,NextFunction} from 'express';
-import {checkAccessTokenAvailable,genereteAuthTokens} from '../services/token.service.js';
+import {genereteAuthTokens} from '../services/token.service.js';
 import {hashPassword,comparePassword} from '../services/password.service';
 import OAuth from '../dataBase/OAuth';
 import {
-    CheckRefreshTokenRequest,
     CustomRequest,
     ReqUser,
-    TokenInfoInterface,
-    RefreshIn,
-    CheckAccessTokenRequest
+    CheckAccessTokenRequest, CheckRefreshTokenRequest
 } from '../interfaces/User.interface'
 import CustomError from "../error/CustomError";
 import OAuthModel from "../dataBase/OAuth";
-import {log} from "util";
+
 
 export const login =async (req:CustomRequest,res:Response,next:NextFunction)=>{
     try{
@@ -41,29 +38,22 @@ export const login =async (req:CustomRequest,res:Response,next:NextFunction)=>{
     }
 }
 
-export const logout=async (req:CustomRequest,res:Response,next:NextFunction)=>{
+export const logout=async (req:CheckAccessTokenRequest,res:Response,next:NextFunction)=>{
     try{
-         const {access_token,user}=req;
-
-        const {email,name}=user as ReqUser
+         const {access_token}=req;
 
          await OAuth.deleteOne({access_token});
 
-        // await emailService.sendEmail(email,emailActionTypeEnum.LOGOUT,{
-        //     name,
-        //     count:1
-        // });
-        //
          res.sendStatus(204);
     }catch(e){
         next(e)
     }
 }
 
-export const refresh=async (req:CustomRequest,res:Response,next:NextFunction)=>{
+export const refresh=async (req:CheckRefreshTokenRequest,res:Response,next:NextFunction)=>{
     try{
 
-    const{user:userId,refresh_token}=req;
+    const{userId,refresh_token}=req.tokenInfo || {};
 
 
 
@@ -72,13 +62,12 @@ export const refresh=async (req:CustomRequest,res:Response,next:NextFunction)=>{
  }
  await OAuthModel.deleteOne({refresh_token});
 
- const tokens =genereteAuthTokens();
+ const tokens = genereteAuthTokens();
 
  await OAuthModel.create({
      userId,
      ...tokens
  })
-         console.log('almost finished !!!!!!!!!!!!!!!!!!!!!',userId)
          res.json(tokens)
     }catch(e){
         next(e)
