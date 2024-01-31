@@ -1,35 +1,33 @@
-import {Schema,model,Document}from 'mongoose';
-import UserModel from "./User";
+import {Schema, model, Document} from 'mongoose';
 
-export interface OAuthDocument extends Document{
-    userId:Schema.Types.ObjectId;
-    access_token:string;
-    refresh_token:string;
-    createdAt:string;
-    updatedAt:string;
+export interface OAuthDocument extends Document {
+    userId: Schema.Types.ObjectId;
+    access_token: string;
+    refresh_token: string;
+    createdAt: string;
+    updatedAt: string;
 }
 
-const OAuthSchema=new Schema<OAuthDocument>(
-
+const OAuthSchema = new Schema<OAuthDocument>(
     {
-            userId:{
-            type:Schema.Types.ObjectId,
-            ref:'user',
-            required:true,
+        userId: {
+            type: Schema.Types.ObjectId,
+            ref: 'user',
+            required: true,
         },
-        access_token:{
-            type:String,
-            required:true,
+        access_token: {
+            type: String,
+            required: true,
         },
-        refresh_token:{
-            type:String,
-            required:true,
+        refresh_token: {
+            type: String,
+            required: true,
         },
     },
-    {timestamps:true}
+    {timestamps: true}
 );
 
-const OAuthModel=  model<OAuthDocument>('oauth',OAuthSchema);
+const OAuthModel = model<OAuthDocument>('oauth', OAuthSchema);
 
 export default OAuthModel;
-export type AuthDocument=OAuthDocument & Document;
+export type AuthDocument = OAuthDocument & Document;

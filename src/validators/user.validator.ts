@@ -1,6 +1,6 @@
-import Joi, { ObjectSchema } from 'joi';
-import { emailValidator } from './share';
-import { PASSWORD_REGEX } from '../constants/constant';
+import Joi, {ObjectSchema} from 'joi';
+import {emailValidator} from './share';
+import {PASSWORD_REGEX} from '../constants/constant';
 
 const userSubScheme = {
     name: Joi.string().alphanum().min(2).max(100).required(),
@@ -40,7 +40,7 @@ const testValid: ObjectSchema<TestValid> = Joi.object({
     isAdult: Joi.boolean(),
     array: Joi.array()
         .items(testArraySubSchema)
-        .when('isAdult', { is: true, then: Joi.required() }),
+        .when('isAdult', {is: true, then: Joi.required()}),
 });
 
-export { newUserValidator, updateUderValidator, testValid };
+export {newUserValidator, updateUderValidator, testValid};

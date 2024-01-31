@@ -1,5 +1,5 @@
-import { DocumentDefinition, FilterQuery, UpdateQuery, QueryOptions } from 'mongoose';
-import User, { UserDocument } from '../dataBase/User';
+import {DocumentDefinition, FilterQuery, UpdateQuery, QueryOptions} from 'mongoose';
+import User, {UserDocument} from '../dataBase/User';
 
 export default {
     findUsers: (params: FilterQuery<UserDocument> = {}) => {
@@ -16,7 +16,7 @@ export default {
     updateOneUser: (
         filter: FilterQuery<UserDocument>,
         update: UpdateQuery<UserDocument>,
-        options: QueryOptions = { new: true }
+        options: QueryOptions = {new: true}
     ) => {
         return User.findOneAndUpdate(filter, update, options);
     },

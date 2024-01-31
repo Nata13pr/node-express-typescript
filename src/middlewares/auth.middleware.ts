@@ -1,4 +1,4 @@
-import {Request, Response, NextFunction} from 'express';
+import {Response, NextFunction} from 'express';
 import CError from '../error/CustomError';
 import {verifyAccessToken, verifyRefreshToken} from '../services/token.service.js'
 import OAuthModel, {AuthDocument} from "../dataBase/OAuth";
@@ -44,15 +44,13 @@ export const checkRefreshToken = async (req: CheckRefreshTokenRequest, res: Resp
 
         verifyRefreshToken(refresh_token);
 
-        const tokenInfo:TokenInfoInterface | null = await OAuthModel.findOne({refresh_token})
+        const tokenInfo: TokenInfoInterface | null = await OAuthModel.findOne({refresh_token})
 
         if (!tokenInfo) {
             throw  new CError('Token not valid', 401)
         }
 
-        // req.refresh_token = tokenInfo.refresh_token;
-        // req.user = tokenInfo.userId;
-        req.tokenInfo=tokenInfo;
+        req.tokenInfo = tokenInfo;
         next();
     } catch (e) {
         next(e)

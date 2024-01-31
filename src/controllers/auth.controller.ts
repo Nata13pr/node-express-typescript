@@ -1,6 +1,6 @@
-import {Request,Response,NextFunction} from 'express';
+import {Response, NextFunction} from 'express';
 import {genereteAuthTokens} from '../services/token.service.js';
-import {hashPassword,comparePassword} from '../services/password.service';
+import {comparePassword} from '../services/password.service';
 import OAuth from '../dataBase/OAuth';
 import {
     CustomRequest,
@@ -11,65 +11,66 @@ import CustomError from "../error/CustomError";
 import OAuthModel from "../dataBase/OAuth";
 
 
-export const login =async (req:CustomRequest,res:Response,next:NextFunction)=>{
-    try{
-        const user:ReqUser=req.user!;
+export const login = async (req: CustomRequest, res: Response, next: NextFunction) => {
+    try {
+        const user: ReqUser = req.user!;
 
-        if(!user){
+        if (!user) {
             throw new CustomError('User is not defined')
         }
-         const {password:hashPassword,_id}=req.user!;
-       const {password}=req.body;
+        const {password: hashPassword, _id} = req.user!;
+        const {password} = req.body;
 
-        await comparePassword(hashPassword,password);
+        await comparePassword(hashPassword, password);
 
-    const tokens=genereteAuthTokens();
-      await OAuth.create({
-            userId:_id,
+        const tokens = genereteAuthTokens();
+        await OAuth.create({
+            userId: _id,
             ...tokens
         });
 
         res.json(
-            {user:req.user,
-        ...tokens})
+            {
+                user: req.user,
+                ...tokens
+            })
 
-    }catch(e){
+    } catch (e) {
         next(e);
     }
 }
 
-export const logout=async (req:CheckAccessTokenRequest,res:Response,next:NextFunction)=>{
-    try{
-         const {access_token}=req;
+export const logout = async (req: CheckAccessTokenRequest, res: Response, next: NextFunction) => {
+    try {
+        const {access_token} = req;
 
-         await OAuth.deleteOne({access_token});
+        await OAuth.deleteOne({access_token});
 
-         res.sendStatus(204);
-    }catch(e){
+        res.sendStatus(204);
+    } catch (e) {
         next(e)
     }
 }
 
-export const refresh=async (req:CheckRefreshTokenRequest,res:Response,next:NextFunction)=>{
-    try{
+export const refresh = async (req: CheckRefreshTokenRequest, res: Response, next: NextFunction) => {
+    try {
 
-    const{userId,refresh_token}=req.tokenInfo || {};
+        const {userId, refresh_token} = req.tokenInfo || {};
 
 
+        if (!userId || !refresh_token) {
+            throw new CustomError('Invalid token information')
+        }
+        await OAuthModel.deleteOne({refresh_token});
 
- if(!userId || !refresh_token){
-     throw new CustomError('Invalid token information')
- }
- await OAuthModel.deleteOne({refresh_token});
+        const tokens = genereteAuthTokens();
 
- const tokens = genereteAuthTokens();
-
- await OAuthModel.create({
-     userId,
-     ...tokens
- })
-         res.json(tokens)
-    }catch(e){
+        await OAuthModel.create({
+            userId,
+            ...tokens
+        })
+        res.json(tokens)
+    } catch (e) {
         next(e)
     }
 }
