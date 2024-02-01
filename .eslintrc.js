@@ -72,10 +72,10 @@ module.exports = {
     //     'indent': ['error', 7, { 'SwitchCase': 1 }],
     //     "arrow-spacing": ["error", { "before": true, "after": true }],
     //     "key-spacing": ["error", { "beforeColon": true, "afterColon": true }],
-    //     "padding-line-between-statements": [
-    //         "error",
-    //         { blankLine: "always", prev: "*", next: "function" },
-    //         { blankLine: "always", prev: "function", next: "*" },
-    //     ],
+        "padding-line-between-statements": [
+            "error",
+            { blankLine: "always", prev: "*", next: "function" },
+            { blankLine: "always", prev: "function", next: "*" },
+        ],
     }
 }
