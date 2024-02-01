@@ -31,7 +31,7 @@ module.exports = {
     "rules": {
         "import/order": ["error", { "groups": [["builtin", "external"], ["internal", "parent", "sibling", "index"]] }],
         "@typescript-eslint/indent": ["error", 2],
-        "@typescript-eslint/explicit-module-boundary-types": "off" // Якщо необхідно вимкнути
+        "@typescript-eslint/explicit-module-boundary-types": "off"
         // "quotes": ["error", "single"],
         //  'no-var': 'error',
         //  "semi": ["error", "always"],
