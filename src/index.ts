@@ -1,9 +1,11 @@
-import authRouter from './routes/auth.router';
 import express, { Express, NextFunction, Request, Response } from 'express';
 import { connect } from 'mongoose';
+import path from 'path';
+import dotenv from 'dotenv';
 
+import authRouter from './routes/auth.router';
 
-
+dotenv.config({path:path.join(process.cwd(),'src','environments','${process.env.MODE}.env'),});
 const mongoURI: string = 'mongodb://127.0.0.1:27017/camp';
 
 connect( mongoURI );
