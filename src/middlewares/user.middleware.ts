@@ -1,8 +1,8 @@
 import {Request, Response, NextFunction, RequestHandler} from 'express';
 import CustomError from '../error/CustomError';
-import {newUserValidator} from '../validators/user.validator';
+import {newUserValidator,RegisteredUserValidator} from '../validators/user.validator';
 import User from '../dataBase/User';
-import {CustomRequest, ReqUser} from '../interfaces/User.interface'
+import {CheckIsUserPresentRequest, ReqUser} from '../interfaces/User.interface'
 
 
 export const isNewUserValid = (req: Request, res: Response, next: NextFunction) => {
@@ -20,6 +20,20 @@ export const isNewUserValid = (req: Request, res: Response, next: NextFunction) 
     }
 };
 
+export  const IsUserValid=(req:Request,res:Response,next:NextFunction)=>{
+    try{
+        const{error,value}=RegisteredUserValidator.validate(req.body);
+
+        if(error){
+            throw new CustomError((error.details[0].message))
+        }
+        req.body = value;
+        next();
+    }catch(e){
+        next(e)
+    }
+}
+
 export const isEmailRegistered = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const {email} = req.body;
@@ -35,16 +49,27 @@ export const isEmailRegistered = async (req: Request, res: Response, next: NextF
     }
 };
 
-export const checkIsUserPresent: RequestHandler = async (req: CustomRequest, res: Response, next: NextFunction) => {
+export const checkIsUserPresent: RequestHandler = async (req: CheckIsUserPresentRequest, res: Response, next: NextFunction) => {
     try {
-        const {email} = req.body;
-        const userByEmail = await User.findOne({email});
+        const { email, name } = req.body;
 
-        if (!userByEmail) {
+        if (!email && !name) {
+            throw new CustomError(`Email or name is required`, 400);
+        }
+
+        let user;
+
+        if (email) {
+            user = await User.findOne({ email });
+        } else {
+            user = await User.findOne({ name });
+        }
+
+        if (!user) {
             throw new CustomError(`User not found`, 404);
         }
 
-        req.user = userByEmail as ReqUser;
+        req.user = user;
         next();
     } catch (e) {
         next(e);

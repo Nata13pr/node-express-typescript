@@ -1,9 +1,9 @@
 import {Response, NextFunction} from 'express';
-import {genereteAuthTokens} from '../services/token.service.js';
+import {generateAuthTokens} from '../services/token.service.js';
 import {comparePassword} from '../services/password.service';
 import OAuth from '../dataBase/OAuth';
 import {
-    CustomRequest,
+    CheckIsUserPresentRequest,
     ReqUser,
     CheckAccessTokenRequest, CheckRefreshTokenRequest
 } from '../interfaces/User.interface'
@@ -11,7 +11,7 @@ import CustomError from "../error/CustomError";
 import OAuthModel from "../dataBase/OAuth";
 
 
-export const login = async (req: CustomRequest, res: Response, next: NextFunction) => {
+export const login = async (req: CheckIsUserPresentRequest, res: Response, next: NextFunction) => {
     try {
         const user: ReqUser = req.user!;
 
@@ -23,7 +23,7 @@ export const login = async (req: CustomRequest, res: Response, next: NextFunctio
 
         await comparePassword(hashPassword, password);
 
-        const tokens = genereteAuthTokens();
+        const tokens = generateAuthTokens();
         await OAuth.create({
             userId: _id,
             ...tokens
@@ -63,7 +63,7 @@ export const refresh = async (req: CheckRefreshTokenRequest, res: Response, next
         }
         await OAuthModel.deleteOne({refresh_token});
 
-        const tokens = genereteAuthTokens();
+        const tokens = generateAuthTokens();
 
         await OAuthModel.create({
             userId,

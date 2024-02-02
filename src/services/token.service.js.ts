@@ -3,7 +3,7 @@ import CError from '../error/CustomError';
 import {ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET} from '../constants/config';
 import {AuthPayload} from '../interfaces/Auth.interface'
 
-export function genereteAuthTokens(payload: AuthPayload = {
+export function generateAuthTokens(payload: AuthPayload = {
     userId: '',
     _id: ''
 }): { access_token: string, refresh_token: string } {
@@ -15,19 +15,11 @@ export function genereteAuthTokens(payload: AuthPayload = {
         refresh_token
     }
 }
-
-export function verifyAccessToken(token: string = ''): AuthPayload {
+export function verifyToken(token: string = '',type:string=''): AuthPayload {
     try {
-        return jwt.verify(token, ACCESS_TOKEN_SECRET) as AuthPayload;
+        return jwt.verify(token, type) as AuthPayload;
     } catch (e) {
         throw new CError('Token not valid', 401)
     }
 }
 
-export function verifyRefreshToken(token: string = ''): AuthPayload {
-    try {
-        return jwt.verify(token, REFRESH_TOKEN_SECRET) as AuthPayload;
-    } catch (e) {
-        throw new CError('Token not valid', 401)
-    }
-}

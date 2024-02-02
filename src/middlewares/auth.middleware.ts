@@ -1,8 +1,9 @@
 import {Response, NextFunction} from 'express';
 import CError from '../error/CustomError';
-import {verifyAccessToken, verifyRefreshToken} from '../services/token.service.js'
+import { verifyToken} from '../services/token.service.js'
 import OAuthModel, {AuthDocument} from "../dataBase/OAuth";
 import {CheckAccessTokenRequest, CheckRefreshTokenRequest, TokenInfoInterface} from '../interfaces/User.interface'
+import {ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET} from "../constants/config";
 
 
 export const checkAccessToken = async (
@@ -15,10 +16,10 @@ export const checkAccessToken = async (
         const access_token: string | undefined = req.get("Authorization")
 
         if (!access_token) {
-            throw new CError('No token', 201);
+            throw new CError('No token', 401);
         }
 
-        verifyAccessToken(access_token);
+        verifyToken(access_token,ACCESS_TOKEN_SECRET);
 
         const tokenInfo: AuthDocument | null = await OAuthModel.findOne({access_token}).populate('userId');
 
@@ -42,7 +43,7 @@ export const checkRefreshToken = async (req: CheckRefreshTokenRequest, res: Resp
             throw new CError('No token', 401);
         }
 
-        verifyRefreshToken(refresh_token);
+        verifyToken(refresh_token,REFRESH_TOKEN_SECRET);
 
         const tokenInfo: TokenInfoInterface | null = await OAuthModel.findOne({refresh_token})
 

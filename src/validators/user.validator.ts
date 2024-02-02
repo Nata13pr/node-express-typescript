@@ -1,32 +1,16 @@
 import Joi, {ObjectSchema} from 'joi';
 import {emailValidator} from './share';
 import {PASSWORD_REGEX} from '../constants/constant';
+import {NewUserValidator,RegisteredUserValidator,UpdateUserValidator,TestValid} from '../interfaces/Validator.interface'
 
-const userSubScheme = {
+export const userSubScheme = {
     name: Joi.string().alphanum().min(2).max(100).required(),
-    age: Joi.number().integer().min(1).max(130),
 };
-
 const testArraySubSchema = Joi.object({
     car: Joi.boolean(),
 });
 
-interface NewUserValidator {
-    name: string;
-    age?: number;
-    email: string;
-    password: string;
-}
 
-interface UpdateUserValidator {
-    name: string;
-    age?: number;
-}
-
-interface TestValid {
-    isAdult?: boolean;
-    array?: Array<{ car?: boolean }>;
-}
 
 const newUserValidator: ObjectSchema<NewUserValidator> = Joi.object({
     ...userSubScheme,
@@ -34,7 +18,17 @@ const newUserValidator: ObjectSchema<NewUserValidator> = Joi.object({
     password: Joi.string().regex(PASSWORD_REGEX).required(),
 });
 
-const updateUderValidator: ObjectSchema<UpdateUserValidator> = Joi.object(userSubScheme);
+
+const RegisteredUserValidator: ObjectSchema<RegisteredUserValidator> = Joi.object({
+    ...userSubScheme,
+    email: emailValidator,
+    name: Joi.string().alphanum().min(2).max(100),
+     password: Joi.string().regex(PASSWORD_REGEX).required(),
+})
+    .with('email', 'password')
+    .with('name', 'password');
+
+const updateUserValidator: ObjectSchema<UpdateUserValidator> = Joi.object(userSubScheme);
 
 const testValid: ObjectSchema<TestValid> = Joi.object({
     isAdult: Joi.boolean(),
@@ -43,4 +37,4 @@ const testValid: ObjectSchema<TestValid> = Joi.object({
         .when('isAdult', {is: true, then: Joi.required()}),
 });
 
-export {newUserValidator, updateUderValidator, testValid};
+export {newUserValidator, updateUserValidator, testValid,RegisteredUserValidator};
