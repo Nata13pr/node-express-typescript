@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import {MONGOURI,PORT} from './constants/constant'
 
 import authRouter from './routes/auth.router';
+import todoRouter from './routes/todo.router'
 
 dotenv.config({path:path.join(process.cwd(),'src','environments','${process.env.MODE}.env'),});
 
@@ -17,6 +18,7 @@ app.use( express.json() );
 app.use( express.urlencoded( { extended : true } ) );
 
 app.use( '/api/user', authRouter );
+app.use('/api/todos',todoRouter)
 
 
 app.use( '*', ( req: Request, res: Response, next: NextFunction ) => {

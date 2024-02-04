@@ -7,12 +7,12 @@ import {checkAccessToken, checkRefreshToken} from '../middlewares/auth.middlewar
 const authRouter: Router = Router();
 
 authRouter.post(
-    '/register',
+    '/signUp',
     isNewUserValid,
     isEmailRegistered,
     createUser
 );
-authRouter.post('/login',
+authRouter.post('/signIn',
     IsUserValid,
     checkIsUserPresent,
     login)
