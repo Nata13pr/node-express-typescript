@@ -1,14 +1,11 @@
 import {Router} from "express";
 
 import {createColumn} from '../controllers/todo.controller' ;
-import authRouter from "./auth.router";
-
+import {checkAccessToken} from '../middlewares/auth.middleware'
 
 const todoRouter: Router = Router();
 
-todoRouter.post('/',createColumn)
+todoRouter.post('/column',checkAccessToken,createColumn)
 
-
-
-export default authRouter;
+export default todoRouter;
 
