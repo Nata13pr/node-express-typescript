@@ -1,3 +1,10 @@
+import {Request} from "express";
+import {TokenInfoInterface} from "./User.interface";
+
+interface Body{
+    name:string;
+}
+
 interface Todo {
     private: boolean;
     _id: string;
@@ -17,4 +24,9 @@ interface TodoColumn {
     createdAt: Date;
     updatedAt: Date;
     __v: number;
+}
+export interface CreateColumnRequest extends Request {
+    body: Body;
+    user?:TokenInfoInterface;
+
 }

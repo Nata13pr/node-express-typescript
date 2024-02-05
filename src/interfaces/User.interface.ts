@@ -22,18 +22,19 @@ export interface TokenInfoInterface extends OAuthDocument {
     __v?: number;
 }
 
-export interface CheckIsUserPresentRequest extends Request {
+export interface LoginRequest extends Request {
     user?: ReqUser;
     access_token?: string;
     refresh_token?: string;
 }
 
-export interface CheckAccessTokenRequest extends Request {
+export interface LogoutRequest extends Request {
     access_token?: string;
+    user?:TokenInfoInterface;
 
 }
 
-export interface CheckRefreshTokenRequest extends Request {
+export interface RefreshRequest extends Request {
     tokenInfo?: TokenInfoInterface;
 
 }

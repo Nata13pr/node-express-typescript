@@ -1,4 +1,6 @@
-export const ACCESS_TOKEN_SECRET: string = '030ad324fdbef7bda36c24d983bb11d5';
-export const REFRESH_TOKEN_SECRET: string = '5d6afd1fa06fb4b41c1ecbab6a7fff98';
+export const ACCESS_TOKEN_SECRET: string = process.env.ACCESS_TOKEN_SECRET || 'qqqqqq';
+export const REFRESH_TOKEN_SECRET: string = process.env.REFRESH_TOKEN_SECRET || 'ppppppppppp';
 
-
+export const MONGO_URL: string = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/camp';
+export const PORT: number = 7000
+;

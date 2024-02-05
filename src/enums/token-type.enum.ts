@@ -1,6 +1,6 @@
-export const tokenTypes = {
-    ACCESS: 'access',
-    REFRESH: 'refresh',
-} ;
-
-export type TokenType = keyof typeof tokenTypes;
+// export const tokenTypes = {
+//     ACCESS: 'access',
+//     REFRESH: 'refresh',
+// } ;
+//
+// export type TokenType = keyof typeof tokenTypes;

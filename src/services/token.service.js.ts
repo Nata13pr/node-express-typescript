@@ -15,7 +15,8 @@ export function generateAuthTokens(payload: AuthPayload = {
         refresh_token
     }
 }
-export function verifyToken(token: string = '',type:string=''): AuthPayload {
+
+export function verifyToken(token: string = '', type: string = ''): AuthPayload {
     try {
         return jwt.verify(token, type) as AuthPayload;
     } catch (e) {

@@ -1,66 +1,89 @@
-import {Schema, model} from 'mongoose'
+// src/dataBase/Todo.ts
+import { Schema, model, Document } from 'mongoose';
 
+// Інтерфейс для Todo
+export interface Todo {
+    private: boolean;
+    _id:Schema.Types.ObjectId;
+    creatorId: string;
+    text: string;
+    column: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+    __v?: number;
+}
 
-const todoSchema = new Schema<Todo>(
-    {
-        private: {
-            type: Boolean,
-            required: true
-        },
-        creatorId: {
-            type: String,
-            required: true
-        },
-        text: {
-            type: String,
-            required: true
-        },
-        column: {
-            type: String,
-            required: true
-        },
-        createdAt: {
-            type: Date,
-            default: Date.now
-        },
-        updatedAt: {
-            type: Date,
-            default: Date.now
-        },
-        __v: {
-            type: Number,
-            default: 0
-        },
-    });
+// Інтерфейс для TodoColumn
+export interface TodoColumn {
+    todos: Todo[];
+    creatorId: string;
+    name: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+    __v?: number;
+}
 
-const todoColumnSchema = new Schema<TodoColumn>({
-    todos: [todoSchema],
+// Схема для Todo
+const todoSchema = new Schema<Todo>({
+    private: {
+        type: Boolean,
+        required: true,
+    },
     creatorId: {
         type: String,
-        required: true
+        required: true,
     },
-    name: {
+    text: {
         type: String,
-        required: true
+        required: true,
+    },
+    column: {
+        type: String,
+        required: true,
     },
     createdAt: {
         type: Date,
-        default: Date.now
+        default: Date.now,
     },
     updatedAt: {
         type: Date,
-        default: Date.now
+        default: Date.now,
     },
     __v: {
         type: Number,
-        default: 0
+        default: 0,
     },
 });
 
-// Модель для todo
-const TodoModel = model<Todo>('Todo', todoSchema);
+// Схема для TodoColumn
+const todoColumnSchema = new Schema<TodoColumn>({
+    todos: [todoSchema],
+    creatorId: {
+        type: Schema.Types.ObjectId,
+         required:true,
+    },
+    name: {
+        type: String,
+        required: true,
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    },
+    updatedAt: {
+        type: Date,
+        default: Date.now,
+    },
+    __v: {
+        type: Number,
+        default: 0,
+    },
+});
 
-// Модель для колонки (з завданнями)
-const TodoColumnModel = model<TodoColumn>('TodoColumn', todoColumnSchema);
+// Модель для Todo
+const TodoModel = model<Todo & Document>('Todo', todoSchema);
 
-export {TodoModel, TodoColumnModel};
+// Модель для TodoColumn
+const TodoColumnModel = model<TodoColumn & Document>('TodoColumn', todoColumnSchema);
+
+export default { TodoModel, TodoColumnModel };

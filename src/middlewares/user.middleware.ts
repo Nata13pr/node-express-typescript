@@ -2,7 +2,7 @@ import {Request, Response, NextFunction, RequestHandler} from 'express';
 import CustomError from '../error/CustomError';
 import {newUserValidator,RegisteredUserValidator} from '../validators/user.validator';
 import User from '../dataBase/User';
-import {CheckIsUserPresentRequest, ReqUser} from '../interfaces/User.interface'
+import {LoginRequest, ReqUser} from '../interfaces/User.interface'
 
 
 export const isNewUserValid = (req: Request, res: Response, next: NextFunction) => {
@@ -49,7 +49,7 @@ export const isEmailRegistered = async (req: Request, res: Response, next: NextF
     }
 };
 
-export const checkIsUserPresent: RequestHandler = async (req: CheckIsUserPresentRequest, res: Response, next: NextFunction) => {
+export const checkIsUserPresent: RequestHandler = async (req: LoginRequest, res: Response, next: NextFunction) => {
     try {
         const { email, name } = req.body;
 

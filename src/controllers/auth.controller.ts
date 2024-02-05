@@ -3,15 +3,14 @@ import {generateAuthTokens} from '../services/token.service.js';
 import {comparePassword} from '../services/password.service';
 import OAuth from '../dataBase/OAuth';
 import {
-    CheckIsUserPresentRequest,
-    ReqUser,
-    CheckAccessTokenRequest, CheckRefreshTokenRequest
+    LoginRequest,
+    LogoutRequest,
+    RefreshRequest, ReqUser
 } from '../interfaces/User.interface'
 import CustomError from "../error/CustomError";
 import OAuthModel from "../dataBase/OAuth";
 
-
-export const login = async (req: CheckIsUserPresentRequest, res: Response, next: NextFunction) => {
+export const login = async (req: LoginRequest, res: Response, next: NextFunction) => {
     try {
         const user: ReqUser = req.user!;
 
@@ -40,7 +39,7 @@ export const login = async (req: CheckIsUserPresentRequest, res: Response, next:
     }
 }
 
-export const logout = async (req: CheckAccessTokenRequest, res: Response, next: NextFunction) => {
+export const logout = async (req: LogoutRequest, res: Response, next: NextFunction) => {
     try {
         const {access_token} = req;
 
@@ -52,7 +51,7 @@ export const logout = async (req: CheckAccessTokenRequest, res: Response, next: 
     }
 }
 
-export const refresh = async (req: CheckRefreshTokenRequest, res: Response, next: NextFunction) => {
+export const refresh = async (req: RefreshRequest, res: Response, next: NextFunction) => {
     try {
 
         const {userId, refresh_token} = req.tokenInfo || {};

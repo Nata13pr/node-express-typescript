@@ -2,17 +2,16 @@ import {Response, NextFunction} from 'express';
 import CError from '../error/CustomError';
 import { verifyToken} from '../services/token.service.js'
 import OAuthModel, {AuthDocument} from "../dataBase/OAuth";
-import {CheckAccessTokenRequest, CheckRefreshTokenRequest, TokenInfoInterface} from '../interfaces/User.interface'
+import {LogoutRequest,RefreshRequest, TokenInfoInterface} from '../interfaces/User.interface'
 import {ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET} from "../constants/config";
 
 
 export const checkAccessToken = async (
-    req: CheckAccessTokenRequest,
+    req: LogoutRequest,
     res: Response,
     next: NextFunction
 ): Promise<void> => {
     try {
-
         const access_token: string | undefined = req.get("Authorization")
 
         if (!access_token) {
@@ -26,6 +25,8 @@ export const checkAccessToken = async (
         if (!tokenInfo) {
             throw new CError('Token not valid', 401);
         }
+        console.log('tokeb',tokenInfo.userId)
+        req.user=tokenInfo;
 
         req.access_token = tokenInfo.access_token;
 
@@ -35,7 +36,7 @@ export const checkAccessToken = async (
     }
 }
 
-export const checkRefreshToken = async (req: CheckRefreshTokenRequest, res: Response, next: NextFunction): Promise<void> => {
+export const checkRefreshToken = async (req: RefreshRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
         const refresh_token: string | undefined = req.get('Authorization');
 
