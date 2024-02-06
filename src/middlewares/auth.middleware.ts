@@ -25,7 +25,7 @@ export const checkAccessToken = async (
         if (!tokenInfo) {
             throw new CError('Token not valid', 401);
         }
-        console.log('tokeb',tokenInfo.userId)
+
         req.user=tokenInfo;
 
         req.access_token = tokenInfo.access_token;

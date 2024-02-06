@@ -25,7 +25,11 @@ async function deleteColumn(req: any, res: Response, next: NextFunction): Promis
     try {
 
         const { id } = req.params;
-        await todoService.deleteOneColumn( { _id : id } );
+        console.log('2222222222222',id)
+        const del=await todoService.deleteOneColumn(  {_id:id } );
+       const one= await todoService.findOneColumn(id)
+        console.log('rrrrrrrrrrrr',one)
+        console.log('dellllllllll',del)
 
         res.sendStatus( 204 );
 
