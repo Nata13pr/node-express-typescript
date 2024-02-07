@@ -1,34 +1,55 @@
-import { Model, Document, Schema, UpdateQuery } from 'mongoose';
-import  TodoColumn  from '../dataBase/Todo'; // Adjust the path based on your actual file structure
+// import { Model, Document, Schema, UpdateQuery } from 'mongoose';
+// // import  TodoColumn  from '../dataBase/Todo'; // Adjust the path based on your actual file structure
+//
+//
+// interface IUser extends Document {
+//     // Define your user schema fields here
+// }
+//
+// export interface IUpdateOptions {
+//     new?: boolean;
+// }
+//
+//
+// interface IUserService {
+//     findColumns: (params: Record<string, any>) => Promise<IUser[]>;
+//     findOneColumn: (params: Record<string, any>) => Promise<IUser | null>;
+//     createColumn: (user: typeof TodoColumn) => Promise<IUser>;
+//     updateOneColumn: (
+//         params: Record<string, any>,
+//         userData: UpdateQuery<IUser>,
+//         options: IUpdateOptions
+//     ) => Promise<IUser | null>;
+//     deleteOneUser: (params: Record<string, any>) => Promise<void>;
+// }
+//
+// export const todoService: IUserService = {
+//     findColumns: (params) => TodoColumn.TodoModel.find(params).exec(),
+//     findOneColumn: (params) => TodoColumn.TodoModel.findOne(params).exec(),
+//     createColumn: (user) => TodoColumn.TodoModel.create(user),
+//     updateOneColumn: (params, userData, options) =>
+//         TodoColumn.TodoModel.findOneAndUpdate(params, userData, options).exec(),
+//     deleteOneUser: (params) => TodoColumn.TodoModel.deleteOne(params).exec(),
+// };
 
-interface IUser extends Document {
-    // Define your user schema fields here
+import {DocumentDefinition, FilterQuery, UpdateQuery, QueryOptions} from 'mongoose';
+import TodoColumn, {TodoDocument} from '../dataBase/Todo';
+import User, {UserDocument} from "../dataBase/User";
+
+export default {
+    createColumn: (user: DocumentDefinition<TodoDocument>) => {
+        return TodoColumn.TodoColumnModel.create(user);
+    },
+    deleteOneColumn: (params: FilterQuery<UserDocument>) => {
+        return TodoColumn.TodoColumnModel.deleteOne(params);
+    },
+    findColumns : ( params: FilterQuery<UserDocument> ) => {
+        return TodoColumn.TodoColumnModel.find( params );
+    },
+    updateOneColumn : ( params:FilterQuery<UserDocument>, userData:UpdateQuery<TodoDocument>, options = { new : true } ) => {
+        return User.findOneAndUpdate( userData );
+    },
 }
-
-export interface IUpdateOptions {
-    new?: boolean;
-}
-
-interface IUserService {
-    findColumns: (params: Record<string, any>) => Promise<IUser[]>;
-    findOneColumn: (params: Record<string, any>) => Promise<IUser | null>;
-    createColumn: (user: IUser) => Promise<IUser>;
-    updateOneColumn: (
-        params: Record<string, any>,
-        userData: UpdateQuery<IUser>,
-        options: IUpdateOptions
-    ) => Promise<IUser | null>;
-    deleteOneColumn: (params: Record<string, any>) => Promise<void>;
-}
-
-export const todoService: IUserService = {
-    findColumns: (params) => TodoColumn.TodoModel.find(params).exec(),
-    findOneColumn: (params) => TodoColumn.TodoModel.findOne(params).exec(),
-    createColumn: (user) => TodoColumn.TodoModel.create(user),
-    updateOneColumn: (params, userData, options) =>
-        TodoColumn.TodoModel.findOneAndUpdate(params, userData, options).exec(),
-    deleteOneColumn: (params) => TodoColumn.TodoModel.deleteOne(params).exec(),
-};
 // import { Model, Document, Schema, UpdateQuery } from 'mongoose';
 // import TodoColumn, {Todo} from '../dataBase/Todo';
 // import * as Mongoose from "mongoose";

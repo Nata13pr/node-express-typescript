@@ -1,8 +1,9 @@
 import {Request, Response, NextFunction} from 'express';
 
-import Models from '../dataBase/Todo';
+import Models, {TodoDocument} from '../dataBase/Todo';
 import {CreateColumnRequest} from '../interfaces/Todo.interface'
-import {todoService} from '../services/column.service'
+import todoService from '../services/column.service'
+import * as mongoose from "mongoose";
 
 
 async function createColumn(req: CreateColumnRequest, res: Response, next: NextFunction): Promise<void> {
@@ -10,10 +11,16 @@ async function createColumn(req: CreateColumnRequest, res: Response, next: NextF
         const {_id} = req.user!;
         const {name} = req.body!;
 
-        const column = await Models.TodoColumnModel.create({
+        if (!_id) {
+            throw new Error('User _id is undefined'); // Викинути помилку, якщо _id === undefined
+        }
+
+        const column = await todoService.createColumn({
             name,
             creatorId: _id,
+            todos: []
         });
+
         res.status(201).json(column);
 
     } catch (e) {
@@ -21,15 +28,12 @@ async function createColumn(req: CreateColumnRequest, res: Response, next: NextF
     }
 }
 
-async function deleteColumn(req: any, res: Response, next: NextFunction): Promise<void> {
+async function deleteColumn(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
 
         const { id } = req.params;
-        console.log('2222222222222',id)
-        const del=await todoService.deleteOneColumn(  {_id:id } );
-       const one= await todoService.findOneColumn(id)
-        console.log('rrrrrrrrrrrr',one)
-        console.log('dellllllllll',del)
+
+       await todoService.deleteOneColumn({_id:id} );
 
         res.sendStatus( 204 );
 
@@ -38,7 +42,30 @@ async function deleteColumn(req: any, res: Response, next: NextFunction): Promis
     }
 }
 
+async function findAllColumns(req:Request,res:Response,next:NextFunction):Promise<void>{
+    try{
+const users=await todoService.findColumns(req.query)
+       res.json(users)
+    }
+    catch (e) {
+        next(e)
+    }
+}
+async function refactorColumn(req: Request, res: Response, next: NextFunction){
+    try{
+        const { id } = req.params;
+        const updatedUser = await todoService.updateOneColumn(
+            { _id: id },
+            req.body as Partial<TodoDocument> // Приведення до Partial<IUser>, оскільки req.body містить лише певні поля користувача для оновлення
+        );
+    }
+    catch(e){
+        next(e)
+    }
+}
 export {
     createColumn,
-    deleteColumn
+    deleteColumn,
+    findAllColumns,
+    refactorColumn
 };

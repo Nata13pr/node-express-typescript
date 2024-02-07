@@ -1,6 +1,5 @@
 import Joi, {ObjectSchema} from 'joi';
-import {emailValidator} from './share';
-import {PASSWORD_REGEX} from '../constants/constant';
+import {emailValidator, nameValidator, passwordValidator} from './share';
 import {NewUserValidator,RegisteredUserValidator,UpdateUserValidator,TestValid} from '../interfaces/Validator.interface'
 
 export const userSubScheme = {
@@ -15,15 +14,15 @@ const testArraySubSchema = Joi.object({
 const newUserValidator: ObjectSchema<NewUserValidator> = Joi.object({
     ...userSubScheme,
     email: emailValidator.required(),
-    password: Joi.string().regex(PASSWORD_REGEX).required(),
+    password: passwordValidator.required(),
 });
 
 
 const RegisteredUserValidator: ObjectSchema<RegisteredUserValidator> = Joi.object({
     ...userSubScheme,
     email: emailValidator,
-    name: Joi.string().alphanum().min(2).max(100),
-     password: Joi.string().regex(PASSWORD_REGEX).required(),
+    name: nameValidator,
+     password: passwordValidator,
 })
     .with('email', 'password')
     .with('name', 'password');

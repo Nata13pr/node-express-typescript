@@ -1,13 +1,14 @@
 import {Request} from "express";
 import {TokenInfoInterface} from "./User.interface";
+import {Schema} from 'mongoose'
 
 interface Body{
     name:string;
 }
 
-interface Todo {
+export interface Todo {
     private: boolean;
-    _id: string;
+    _id: Schema.Types.ObjectId;
     creatorId: string;
     text: string;
     column: string;
@@ -16,7 +17,7 @@ interface Todo {
     __v: number;
 }
 
-interface TodoColumn {
+export interface TodoColumn {
     todos: Todo[];
     _id: string;
     creatorId: string;

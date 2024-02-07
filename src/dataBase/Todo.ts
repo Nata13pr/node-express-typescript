@@ -2,10 +2,10 @@
 import { Schema, model, Document } from 'mongoose';
 
 // Інтерфейс для Todo
-export interface Todo {
+export interface Todo extends Document{
     private: boolean;
-    _id:Schema.Types.ObjectId;
-    creatorId: string;
+
+    creatorId:Schema.Types.ObjectId;
     text: string;
     column: string;
     createdAt?: Date;
@@ -14,9 +14,10 @@ export interface Todo {
 }
 
 // Інтерфейс для TodoColumn
-export interface TodoColumn {
+export interface TodoColumn  extends Document{
+
     todos: Todo[];
-    creatorId: string;
+    creatorId: Schema.Types.ObjectId;
     name: string;
     createdAt?: Date;
     updatedAt?: Date;
@@ -41,22 +42,27 @@ const todoSchema = new Schema<Todo>({
         type: String,
         required: true,
     },
-    createdAt: {
-        type: Date,
-        default: Date.now,
-    },
-    updatedAt: {
-        type: Date,
-        default: Date.now,
-    },
-    __v: {
-        type: Number,
-        default: 0,
-    },
+    someReference:{
+        type:Schema.Types.ObjectId,
+        ref:'SomeModel',
+    }
+    // createdAt: {
+    //     type: Date,
+    //     default: Date.now,
+    // },
+    // updatedAt: {
+    //     type: Date,
+    //     default: Date.now,
+    // },
+    // __v: {
+    //     type: Number,
+    //     default: 0,
+    // },
 });
 
 // Схема для TodoColumn
 const todoColumnSchema = new Schema<TodoColumn>({
+    // _id:Schema.Types.ObjectId,
     todos: [todoSchema],
     creatorId: {
         type: Schema.Types.ObjectId,
@@ -66,24 +72,29 @@ const todoColumnSchema = new Schema<TodoColumn>({
         type: String,
         required: true,
     },
-    createdAt: {
-        type: Date,
-        default: Date.now,
-    },
-    updatedAt: {
-        type: Date,
-        default: Date.now,
-    },
-    __v: {
-        type: Number,
-        default: 0,
-    },
-});
+    someReference:{
+        type:Schema.Types.ObjectId,
+        ref:'SomeModel',
+    }
+    // createdAt: {
+    //     type: Date,
+    //     default: Date.now,
+    // },
+    // updatedAt: {
+    //     type: Date,
+    //     default: Date.now,
+    // },
+    // __v: {
+    //     type: Number,
+    //     default: 0,
+    // },
+},{timestamps:true});
 
 // Модель для Todo
-const TodoModel = model<Todo & Document>('Todo', todoSchema);
+const TodoModel = model('Todo', todoSchema);
 
 // Модель для TodoColumn
-const TodoColumnModel = model<TodoColumn & Document>('TodoColumn', todoColumnSchema);
+const TodoColumnModel = model('TodoColumn', todoColumnSchema);
 
+export type TodoDocument=TodoColumn & Document;
 export default { TodoModel, TodoColumnModel };
