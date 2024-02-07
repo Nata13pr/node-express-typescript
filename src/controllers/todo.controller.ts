@@ -9,10 +9,11 @@ import * as mongoose from "mongoose";
 async function createColumn(req: CreateColumnRequest, res: Response, next: NextFunction): Promise<void> {
     try {
         const {_id} = req.user!;
+
         const {name} = req.body!;
 
         if (!_id) {
-            throw new Error('User _id is undefined'); // Викинути помилку, якщо _id === undefined
+            throw new Error('User _id is undefined');
         }
 
         const column = await todoService.createColumn({
@@ -56,8 +57,9 @@ async function refactorColumn(req: Request, res: Response, next: NextFunction){
         const { id } = req.params;
         const updatedUser = await todoService.updateOneColumn(
             { _id: id },
-            req.body as Partial<TodoDocument> // Приведення до Partial<IUser>, оскільки req.body містить лише певні поля користувача для оновлення
+            req.body as Partial<TodoDocument>
         );
+        res.status( 201 ).json( updatedUser );
     }
     catch(e){
         next(e)
