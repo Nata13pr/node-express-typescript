@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import CError from '../error/CustomError';
 import {ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET} from '../constants/config';
-import {AuthPayload} from '../interfaces/Auth.interface'
+import {AuthPayload} from '../interfaces/User.interface'
 
 export function generateAuthTokens(payload: AuthPayload = {
     userId: '',

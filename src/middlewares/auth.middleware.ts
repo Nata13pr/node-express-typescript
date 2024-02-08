@@ -1,10 +1,10 @@
 import {Response, NextFunction} from 'express';
-import CError from '../error/CustomError';
-import { verifyToken} from '../services/token.service.js'
-import OAuthModel, {AuthDocument} from "../dataBase/OAuth";
-import {LogoutRequest,RefreshRequest, TokenInfoInterface} from '../interfaces/User.interface'
-import {ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET} from "../constants/config";
 
+import CError from '../error/CustomError';
+import {verifyToken} from '../services/token.service.js'
+import OAuthModel, {AuthDocument} from "../dataBase/OAuth";
+import {LogoutRequest, RefreshRequest, TokenInfoInterface} from '../interfaces/User.interface'
+import {ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET} from "../constants/config";
 
 export const checkAccessToken = async (
     req: LogoutRequest,
@@ -18,7 +18,7 @@ export const checkAccessToken = async (
             throw new CError('No token', 401);
         }
 
-        verifyToken(access_token,ACCESS_TOKEN_SECRET);
+        verifyToken(access_token, ACCESS_TOKEN_SECRET);
 
         const tokenInfo: AuthDocument | null = await OAuthModel.findOne({access_token}).populate('userId');
 
@@ -26,7 +26,7 @@ export const checkAccessToken = async (
             throw new CError('Token not valid', 401);
         }
 
-        req.user=tokenInfo;
+        req.user = tokenInfo;
 
         req.access_token = tokenInfo.access_token;
 
@@ -44,7 +44,7 @@ export const checkRefreshToken = async (req: RefreshRequest, res: Response, next
             throw new CError('No token', 401);
         }
 
-        verifyToken(refresh_token,REFRESH_TOKEN_SECRET);
+        verifyToken(refresh_token, REFRESH_TOKEN_SECRET);
 
         const tokenInfo: TokenInfoInterface | null = await OAuthModel.findOne({refresh_token})
 

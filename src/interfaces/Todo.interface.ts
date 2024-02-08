@@ -2,8 +2,8 @@ import {Request} from "express";
 import {TokenInfoInterface} from "./User.interface";
 import {Schema} from 'mongoose'
 
-interface Body{
-    name:string;
+interface Body {
+    name: string;
 }
 
 export interface Todo {
@@ -26,8 +26,8 @@ export interface TodoColumn {
     updatedAt: Date;
     __v: number;
 }
+
 export interface CreateColumnRequest extends Request {
     body: Body;
-    user?:TokenInfoInterface;
-
+    user?: TokenInfoInterface;
 }

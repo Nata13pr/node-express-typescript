@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { emailValidator, nameValidator } from './share';
+import {emailValidator, nameValidator} from './share';
 
 export const findAll = Joi.object({
     name: nameValidator,

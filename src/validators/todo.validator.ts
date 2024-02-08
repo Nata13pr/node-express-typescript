@@ -1,7 +1,5 @@
-import Joi, {StringSchema} from 'joi';
+import Joi from 'joi';
 
-// export const nameColumnValidator:StringSchema=
-//     Joi.string().alphanum().min(1).max(100);
 export const todoSchema = Joi.object({
     private: Joi.boolean().required(),
     _id: Joi.string().hex().length(24).required(), // assuming _id is a string

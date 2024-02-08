@@ -1,6 +1,6 @@
 import {Request, Response, NextFunction, RequestHandler} from 'express';
 import CustomError from '../error/CustomError';
-import {newUserValidator,RegisteredUserValidator} from '../validators/user.validator';
+import {newUserValidator, RegisteredUserValidator} from '../validators/user.validator';
 import User from '../dataBase/User';
 import {LoginRequest, ReqUser} from '../interfaces/User.interface'
 
@@ -20,16 +20,16 @@ export const isNewUserValid = (req: Request, res: Response, next: NextFunction) 
     }
 };
 
-export  const IsUserValid=(req:Request,res:Response,next:NextFunction)=>{
-    try{
-        const{error,value}=RegisteredUserValidator.validate(req.body);
+export const IsUserValid = (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const {error, value} = RegisteredUserValidator.validate(req.body);
 
-        if(error){
+        if (error) {
             throw new CustomError((error.details[0].message))
         }
         req.body = value;
         next();
-    }catch(e){
+    } catch (e) {
         next(e)
     }
 }
@@ -51,7 +51,7 @@ export const isEmailRegistered = async (req: Request, res: Response, next: NextF
 
 export const checkIsUserPresent: RequestHandler = async (req: LoginRequest, res: Response, next: NextFunction) => {
     try {
-        const { email, name } = req.body;
+        const {email, name} = req.body;
 
         if (!email && !name) {
             throw new CustomError(`Email or name is required`, 400);
@@ -60,9 +60,9 @@ export const checkIsUserPresent: RequestHandler = async (req: LoginRequest, res:
         let user;
 
         if (email) {
-            user = await User.findOne({ email });
+            user = await User.findOne({email});
         } else {
-            user = await User.findOne({ name });
+            user = await User.findOne({name});
         }
 
         if (!user) {

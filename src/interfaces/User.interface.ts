@@ -30,13 +30,18 @@ export interface LoginRequest extends Request {
 
 export interface LogoutRequest extends Request {
     access_token?: string;
-    user?:TokenInfoInterface;
+    user?: TokenInfoInterface;
 
 }
 
 export interface RefreshRequest extends Request {
     tokenInfo?: TokenInfoInterface;
 
+}
+
+export interface AuthPayload {
+    userId: string;
+    _id: string;
 }
 
 
