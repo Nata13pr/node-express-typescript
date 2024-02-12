@@ -42,7 +42,7 @@ const todoSchema = new Schema<Todo>({
         type: Schema.Types.ObjectId,
         ref: 'SomeModel',
     }
-});
+},{timestamps: true});
 
 const todoColumnSchema = new Schema<TodoColumn>({
     todos: [todoSchema],
@@ -54,15 +54,17 @@ const todoColumnSchema = new Schema<TodoColumn>({
         type: String,
         required: true,
     },
+
     someReference: {
         type: Schema.Types.ObjectId,
         ref: 'SomeModel',
     }
 }, {timestamps: true});
 
-const TodoModel = model('Todo', todoSchema);
+const TodoItemModel = model('Todo', todoSchema);
 
 const TodoColumnModel = model('TodoColumn', todoColumnSchema);
 
 export type TodoDocument = TodoColumn & Document;
-export default {TodoModel, TodoColumnModel};
+export type TodoItemDocument=Todo & Document
+export default {TodoItemModel, TodoColumnModel};

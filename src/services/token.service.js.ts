@@ -7,7 +7,7 @@ export function generateAuthTokens(payload: AuthPayload = {
     userId: '',
     _id: ''
 }): { access_token: string, refresh_token: string } {
-    const access_token = jwt.sign(payload, ACCESS_TOKEN_SECRET, {expiresIn: '15m'});
+    const access_token = jwt.sign(payload, ACCESS_TOKEN_SECRET, {expiresIn: '45m'});
     const refresh_token = jwt.sign(payload, REFRESH_TOKEN_SECRET, {expiresIn: '30d'});
 
     return {

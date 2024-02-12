@@ -1,6 +1,6 @@
 import {Request, Response, NextFunction} from 'express';
-import {TodoDocument} from '../dataBase/Todo';
-import {CreateColumnRequest} from '../interfaces/Todo.interface'
+import TodoColumn, {TodoDocument, TodoItemDocument} from '../dataBase/Todo';
+import {CreateColumnRequest, CreateItemRequest} from '../interfaces/Todo.interface'
 import todoService from '../services/column.service'
 
 
@@ -64,9 +64,120 @@ async function refactorColumn(req: Request, res: Response, next: NextFunction) {
     }
 }
 
+async function createItem(req: CreateItemRequest, res: Response, next: NextFunction): Promise<void> {
+    try {
+        const {_id} = req.user!;
+
+        const {column, text} = req.body!;
+
+        if (!_id) {
+            throw new Error('User _id is undefined');
+        }
+
+        const item = await todoService.createItem({
+            private: false,
+            creatorId: _id,
+            column,
+            text,
+        });
+
+        // const columnId = await todoService.findColumnById(column)
+        //
+        // await todoService.updateOneColumn(
+        //     {_id: columnId},
+        //     {$push: {todos: item}}
+        // );
+
+        res.status(201).json(item);
+
+    } catch (e) {
+        next(e);
+    }
+}
+
+async function deleteItem(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+
+        const {id} = req.params;
+
+        const todoInformation = await todoService.findByIdItem({_id: id})
+
+await todoService.deleteOneItem({_id:id})
+
+        const {column} = todoInformation;
+
+        const updatedColumn = await todoService.updateOneColumn(
+            { _id: column },
+            { $pull: { todos: { _id: id } } }
+        );
+
+        res.status(201).json(updatedColumn);
+
+    } catch (e) {
+        next(e);
+    }
+}
+
+async function updateItem(req: CreateItemRequest, res: Response, next: NextFunction): Promise<void> {
+    try {
+
+        const {itemId} = req.params;
+
+        const {column, text} = req.body!;
+
+        // if (!_id) {
+        //     throw new Error('User _id is undefined');
+        // }
+
+        const id = await todoService.findColumnById(column)
+        console.log('fffffffffffffffffff',id)
+        const updatedItem = await todoService.updateOneItem(
+            {text},
+            req.body as Partial<TodoItemDocument>
+        );
+        console.log('uuuuuuuuu',updatedItem)
+
+        const updatedUser = await todoService.updateOneColumn(
+            {_id: id, "todos._id": itemId},
+            { $set: { "todos.$.text": text } },
+        );
+        // { _id: columnId },
+        // { name: newName },
+        // { new: true }
+
+
+        // await todoService.addItemToColumn(column, item);
+        // console.log('uuuuuuuuuuuuuuuuuuuuuuuuuuu', updatedUser)
+        res.status(201).json('hhhh');
+
+        // const {id} = req.params;
+        //
+        // const todoInformation=await todoService.findByIdItem({_id:id})
+        //
+        // const {column}=todoInformation;
+        // const columnInfo = await TodoColumn.TodoColumnModel.findById(column);
+        // const index = columnInfo.todos.findIndex((item:any) => item._id.toString() === id);
+        // console.log('oooooooooooo',index)
+        // const updatedUser = await todoService.updateOneColumn(
+        //     {_id:column},
+        //     { $pull: { todos: { _id: id} } }
+        // );
+        //
+
+
+        // res.status(201).json(updatedUser);
+
+    } catch (e) {
+        next(e);
+    }
+}
+
 export {
     createColumn,
     deleteColumn,
     findAllColumns,
-    refactorColumn
+    refactorColumn,
+    createItem,
+    deleteItem,
+    updateItem
 };

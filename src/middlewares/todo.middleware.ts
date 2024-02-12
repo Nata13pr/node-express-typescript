@@ -2,7 +2,7 @@ import {Request, Response, NextFunction} from 'express';
 import {isValidObjectId} from 'mongoose';
 
 import CustomError from '../error/CustomError';
-import {ColumnValidator} from '../validators/todo.validator';
+import {ColumnValidator,TodosValidator} from '../validators/todo.validator';
 import todoService from '../services/column.service'
 
 export const isColumnValid = async (
@@ -11,12 +11,6 @@ export const isColumnValid = async (
     next: NextFunction
 ): Promise<void> => {
     try {
-        const columnsQuantity = await todoService.findColumns(req.query)
-
-        if (columnsQuantity.length >= 10) {
-            return next(new CustomError('Not enough space for all columns.You should delete some'));
-
-        }
 
         const {error, value} = ColumnValidator.validate(req.body);
 
@@ -82,4 +76,45 @@ export const isColumnPresent = async (
     } catch (e) {
         next(e);
     }
+};
+export const isItemUniq = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+
+        const {text} = req.body;
+
+        if (text.length >= 10) {
+            return next(new CustomError(`Column is too long`, 409));
+        }
+
+        const column = await todoService.findOneItem({text});
+
+        if (column) {
+            return next(new CustomError(`Column with text ${text} already exists`, 409));
+        }
+
+        next();
+    } catch (e) {
+        next(e);
+    }
+};
+
+export const isItemValid = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+
+        const {error, value} = TodosValidator.validate(req.body);
+
+        if (error) {
+            return next(new CustomError(error.details[0].message));
+        }
+
+        req.body = value;
+        next();
+    } catch (e) {
+        next(e);
+    }
+
 };

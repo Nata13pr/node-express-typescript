@@ -16,7 +16,10 @@ export interface Todo {
     updatedAt: Date;
     __v: number;
 }
-
+interface BodyItem{
+    column:string;
+    text:string;
+}
 export interface TodoColumn {
     todos: Todo[];
     _id: string;
@@ -30,4 +33,9 @@ export interface TodoColumn {
 export interface CreateColumnRequest extends Request {
     body: Body;
     user?: TokenInfoInterface;
+}
+
+export interface CreateItemRequest extends Request{
+    body:BodyItem;
+    user?:TokenInfoInterface;
 }
