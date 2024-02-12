@@ -74,7 +74,7 @@ async function createItem(req: CreateItemRequest, res: Response, next: NextFunct
             throw new Error('User _id is undefined');
         }
 
-        const item = await todoService.createItem({
+         await todoService.createItem({
             private: false,
             creatorId: _id,
             column,
@@ -82,13 +82,14 @@ async function createItem(req: CreateItemRequest, res: Response, next: NextFunct
         });
 
         // const columnId = await todoService.findColumnById(column)
-        //
-        // await todoService.updateOneColumn(
-        //     {_id: columnId},
-        //     {$push: {todos: item}}
-        // );
 
-        res.status(201).json(item);
+        // await todoService.updateOn5eColumn(
+        //     {_id: columnId},
+        //     {$push: {todos: item._id}}
+        // );
+        // const columnWithTodos = await TodoColumn.TodoColumnModel.findById(columnId)
+
+        res.status(201).json("columnWithTodos");
 
     } catch (e) {
         next(e);
@@ -121,26 +122,26 @@ await todoService.deleteOneItem({_id:id})
 async function updateItem(req: CreateItemRequest, res: Response, next: NextFunction): Promise<void> {
     try {
 
-        const {itemId} = req.params;
-
-        const {column, text} = req.body!;
-
-        // if (!_id) {
-        //     throw new Error('User _id is undefined');
-        // }
-
-        const id = await todoService.findColumnById(column)
-        console.log('fffffffffffffffffff',id)
-        const updatedItem = await todoService.updateOneItem(
-            {text},
-            req.body as Partial<TodoItemDocument>
-        );
-        console.log('uuuuuuuuu',updatedItem)
-
-        const updatedUser = await todoService.updateOneColumn(
-            {_id: id, "todos._id": itemId},
-            { $set: { "todos.$.text": text } },
-        );
+        // const {itemId} = req.params;
+        //
+        // const {column, text} = req.body!;
+        //
+        // // if (!_id) {
+        // //     throw new Error('User _id is undefined');
+        // // }
+        //
+        // const id = await todoService.findColumnById(column)
+        // console.log('fffffffffffffffffff',id)
+        // const updatedItem = await todoService.updateOneItem(
+        //     {text},
+        //     req.body as Partial<TodoItemDocument>
+        // );
+        // console.log('uuuuuuuuu',updatedItem)
+        //
+        // const updatedUser = await todoService.updateOneColumn(
+        //     {_id: id, "todos._id": itemId},
+        //     { $set: { "todos.$.text": text } },
+        // );
         // { _id: columnId },
         // { name: newName },
         // { new: true }

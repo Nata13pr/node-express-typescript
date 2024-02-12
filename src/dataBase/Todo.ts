@@ -5,7 +5,7 @@ export interface Todo extends Document {
 
     creatorId: Schema.Types.ObjectId;
     text: string;
-    column: string;
+    column: Schema.Types.ObjectId;
     createdAt?: Date;
     updatedAt?: Date;
     __v?: number;
@@ -24,7 +24,6 @@ export interface TodoColumn extends Document {
 const todoSchema = new Schema<Todo>({
     private: {
         type: Boolean,
-        required: true,
     },
     creatorId: {
         type: String,
@@ -35,9 +34,11 @@ const todoSchema = new Schema<Todo>({
         required: true,
     },
     column: {
-        type: String,
-        required: true,
+        type:Schema.Types.ObjectId,
+        ref:"TodoColumn",
+        required: true
     },
+
     someReference: {
         type: Schema.Types.ObjectId,
         ref: 'SomeModel',
@@ -45,7 +46,10 @@ const todoSchema = new Schema<Todo>({
 },{timestamps: true});
 
 const todoColumnSchema = new Schema<TodoColumn>({
-    todos: [todoSchema],
+    todos: [{
+        type:Schema.Types.ObjectId,
+        ref:'Todo'
+    }],
     creatorId: {
         type: Schema.Types.ObjectId,
         required: true,

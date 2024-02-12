@@ -9,7 +9,7 @@ interface Body {
 export interface Todo {
     private: boolean;
     _id: Schema.Types.ObjectId;
-    creatorId: string;
+    creatorId: Schema.Types.ObjectId;
     text: string;
     column: string;
     createdAt: Date;
@@ -17,13 +17,13 @@ export interface Todo {
     __v: number;
 }
 interface BodyItem{
-    column:string;
+    column:Schema.Types.ObjectId
     text:string;
 }
 export interface TodoColumn {
     todos: Todo[];
-    _id: string;
-    creatorId: string;
+    _id: Schema.Types.ObjectId;
+    creatorId: Schema.Types.ObjectId;
     name: string;
     createdAt: Date;
     updatedAt: Date;

@@ -17,6 +17,9 @@ export default {
     updateOneColumn: (params: FilterQuery<UserDocument>, userData: UpdateQuery<TodoDocument>, options = {new: true}) => {
         return TodoColumn.TodoColumnModel.findOneAndUpdate(userData);
     },
+    updateOn5eColumn: (params: FilterQuery<UserDocument>, userData: UpdateQuery<TodoDocument>, options = {new: true}) => {
+        return TodoColumn.TodoColumnModel.findOneAndUpdate(userData);
+    },
     deleteOneColumn: (params: FilterQuery<UserDocument>) => {
         return TodoColumn.TodoColumnModel.deleteOne(params);
     },
